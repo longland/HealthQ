@@ -46,6 +46,18 @@
 			}
 		}
 		
+		private function getWaitTimeAtHospital($hospital) {
+			// Get the median wait time
+		}
+		
+		private function getHospitalsByLocation($location) {
+			// With a latlong get a list of hospitals within a given radius
+		}
+		
+		private function getLocationFromPostcode($postcode) {
+			// Return a latlong for a postcode
+		}
+		
 		private function display($template, $data, $error=NULL) {
 			$data["error"] = $error;
 			require_once $this->settings['layout']['template'];
