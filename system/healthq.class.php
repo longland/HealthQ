@@ -4,10 +4,10 @@
 		
 		public function __construct($routine, $data, $settings) {
 			$this->settings = parse_ini_file($settings, true);
-			$this->db = $this->connectToDatabase();
+			//$this->db = $this->connectToDatabase();
 			$this->generateReplaceableValues();
-			$this->loggedin = false;
-			$this->user = 0;
+			//$this->loggedin = false;
+			//$this->user = 0;
 			$this->timeStarted = microtime(true);
 			
 			$routine = trim($routine);
