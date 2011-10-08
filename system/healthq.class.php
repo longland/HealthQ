@@ -25,9 +25,9 @@
 		}
 		
 		public function index($argument) {
-			$pagedata["title"] = "Home";
-			$pagedata["body"] = "<p>This is a working test page.</p>";
-			$this->display(false, $pagedata);
+			require_once "login.php";
+			require_once $this->settings['layout']['template'];
+			die();
 		}
 		
 		private function error($errortype) {
@@ -46,17 +46,7 @@
 			}
 		}
 		
-		private function getWaitTimeAtHospital($hospital) {
-			// Get the median wait time
-		}
 		
-		private function getHospitalsByLocation($location) {
-			// With a latlong get a list of hospitals within a given radius
-		}
-		
-		private function getLocationFromPostcode($postcode) {
-			// Return a latlong for a postcode
-		}
 		
 		private function display($template, $data, $error=NULL) {
 			$data["error"] = $error;

@@ -2,6 +2,7 @@
 	<head>
 		<title>AetherCop - <?=$data["title"]?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<?=$data["head"]?>
 		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
 		<link rel="stylesheet" href="css/css.css">
 		<script language="javascript" src="js/geotools.js"></script>
