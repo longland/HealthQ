@@ -33,7 +33,7 @@
 		}
 		
 		public function dashboard($argument) {
-			//require_once "login.php";
+			require_once "dashboard.php";
 			$data["title"] = "Dashboard";
 			$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
 			require_once $this->settings['layout']['template'];
@@ -58,7 +58,7 @@
 			$data["head"] .= '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
 			$data["head"] .= '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
 			$data["title"] = "There Has Been A Crime!";
-			$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
+			$data["body"] = "<p>There has been a crime!<br />" .  . "</p>";
 			require_once $this->settings['layout']['template'];
 			die();
 		}
