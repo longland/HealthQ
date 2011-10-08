@@ -26,8 +26,8 @@
 		}
 		
 		public function index($argument) {
-			$pagedata["title"] = "TEST";
-			$pagedata["body"] = "THIS IS A TEST";
+			$pagedata["title"] = "Home";
+			$pagedata["body"] = "<p>This is a working test page.</p>";
 			$this->display(false, $pagedata);
 		}
 
@@ -73,9 +73,6 @@
 		}
 		
 		private function display($template, $data, $error=NULL) {
-			if ($template) {
-				$data = parse_ini_file($this->settings['templates'][$data]);
-			}
 			$data["error"] = $error;
 			require_once $this->settings['layout']['template'];
 			die();
