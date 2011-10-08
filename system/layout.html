@@ -22,6 +22,17 @@
 			</div>
 		</div>
 		<div id="body">
+			<script>
+				//create a osgb coordinate
+				osgb=new GT_OSGB();
+				osgb.setGridCoordinates(333162, 105555);
+
+				//convert to a wgs84 coordinate
+				wgs84 = osgb.getWGS84();
+
+				//now work with wgs84.latitude and wgs84.longitude
+				console.log("Latitude "+ wgs84.latitude + " Longitude "+wgs84.longitude);
+			</script>
 			<p>This is a working test page.</p>
 		</div>
 	</body>

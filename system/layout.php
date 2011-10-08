@@ -15,9 +15,7 @@
 					<h3><a href="#">AetherCop</a></h3>
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
-						<li><a href="#">Link</a></li>
+						<li><a href="#">Dashboard</a></li>
 					</ul>
 				</div>
 			</div>

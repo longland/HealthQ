@@ -26,6 +26,16 @@
 		
 		public function index($argument) {
 			require_once "login.php";
+			//$data["title"] = "Home";
+			//$data["body"] = "<p>Are you happy now?</p>";
+			require_once $this->settings['layout']['template'];
+			die();
+		}
+		
+		public function dashboard($argument) {
+			//require_once "login.php";
+			$data["title"] = "Dashboard";
+			$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
 			require_once $this->settings['layout']['template'];
 			die();
 		}
@@ -37,11 +47,9 @@
 					break;
 				case 403:
 					header('HTTP/1.1 403 Forbidden');
-					$this->display(true, "403");
 					break;
 				case 404:
 					header('HTTP/1.1 404 Not Found');
-					$this->display(true, "404");
 					break;
 			}
 		}
