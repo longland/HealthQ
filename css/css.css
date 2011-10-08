@@ -1,18 +1,10 @@
 #body {
-    max-width: 960px;
+    max-width: 280px;
     margin: 50px auto;
     padding: 0 5%;
+	text-align: center;
 }
 .container {
 	width: 100%;
 	max-width: 280px;
-}
-.login {
-	text-align: center;
-	width: 280px;
-}
-@media device-width > 400px {
-	.login {
-		margin: 0px auto;
-	}
 }

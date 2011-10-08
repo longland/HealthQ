@@ -12,5 +12,4 @@ FB.init({
         });
 </script>
 <fb:login-button perms='email' redirect_uri='http://health.itza.uk.com/dashboard'>Login with Facebook</fb:login-button>
-</div>
-";
+</div>";

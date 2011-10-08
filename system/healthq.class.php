@@ -40,6 +40,29 @@
 			die();
 		}
 		
+		public function crime($argument) {
+			//require_once "login.php";
+			$crime = "There has been a kidnapping! The kidnapper left a note, solve the riddle to solve the crime:";
+			$question = "Where did Sherlock Holmes live?";
+			$answer[0] = "221b Baker Street";
+			$answer[1] = "92 Picadilly Road";
+			$answer[2] = "314d Derby Lane";
+			$correct = 0;
+			$data["head"]  = '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#">';
+			$data["head"] .= '<meta property="fb:app_id"          content="175392325877131">';
+			$data["head"] .= '<meta property="og:type"            content="crimesapp:crime"> ';
+			$data["head"] .= '<meta property="og:url"             content="http://health.itza.uk.com/crime/0/"> ';
+			$data["head"] .= '<meta property="og:title"           content="Sample Crime"> ';
+			$data["head"] .= '<meta property="og:description"     content="Some Arbitrary String"> ';
+			$data["head"] .= '<meta property="og:image"           content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png"> ';
+			$data["head"] .= '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
+			$data["head"] .= '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
+			$data["title"] = "There Has Been A Crime!";
+			$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
+			require_once $this->settings['layout']['template'];
+			die();
+		}
+		
 		private function error($errortype) {
 			switch ($errortype) {
 				case 301:
