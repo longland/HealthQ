@@ -1,4 +1,4 @@
-
+<?php    include 'header.php'; ?>
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js">
       </script>
@@ -20,4 +20,4 @@
            <img id="image"/>
            <div id="name"></div> pick a crime below to play.
            </div>
-    
+<?php    include 'footer.php'; ?>

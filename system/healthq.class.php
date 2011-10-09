@@ -28,7 +28,7 @@
 			require_once "login.php";
 			//$data["title"] = "Home";
 			//$data["body"] = "<p>Are you happy now?</p>";
-			require_once $this->settings['layout']['template'];
+			require_once "footer.php";
 			die();
 		}
 		
@@ -36,7 +36,7 @@
 			require_once "dashboard.php";
 			//$data["title"] = "Dashboard";
 			//$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
-			require_once $this->settings['layout']['template'];
+			//require_once "footer.php";
 			die();
 		}
 		
@@ -60,7 +60,7 @@
 			$data["title"] = "There Has Been A Crime!";
 			$data["body"]  = "<p>There has been a crime!<br />" . $crime . "<br />" . $question . "<br /><br />";
 			$data["body"] .= "<a onclick=" . "</p>";
-			require_once $this->settings['layout']['template'];
+			require_once "footer.php";
 			die();
 		}
 		
