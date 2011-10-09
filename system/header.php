@@ -1,5 +1,5 @@
 <html>
-	<head>
+	<head <?=$data["meta"]?>>
 		<title>Riddled with Crime></title>
 		
 		<?=$data["head"]?>

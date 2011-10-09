@@ -1,3 +1,4 @@
+<h2>Vital Stats</h2>
 <table>
 	<tr>
 		<td>Success Rate</td>

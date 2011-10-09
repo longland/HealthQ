@@ -44,18 +44,31 @@
       Solve a crime from your local area to unlock that location. Unlock more locations to win
       entire sections of London. Compete with your friends to see who will rule the city!
     </p>
- <a href="/signup" class="signup_button round">Play now!</a>
+    <h2>Nearby crimes</h2>
+    <p>
+	<?php
+		$crimetype = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPES WHERE TYPE_ID = " . $data["type"] . " LIMIT 1;");
+		$crimetype = $crimetype->fetch_assoc();
+		$crimetype = $crimetype["TYPE_NAME"];
+	?>
+    We found <?=mt_rand(5,15)?> crimes around you and need your help solving the <?=$crimetype?> crime. Click
+    solve to unravel the mystery and become the owner of this location.
+    </p>
+ <a href="http://health.itza.uk.com/crime/<?=$data["action"]?>/" class="signup_button round">Solve</a>
   
 
-		<?php require_once "stats.php"; ?>
+		
       </section>
       <footer>
+  
   <nav class="round">
    <br />
+    <?php require_once "stats.php"; ?>
     <a href="javascript:FB.ui({ method: 'feed', 
             message: 'Facebook for Websites is super-cool'})" class="tell_button round">Tell your friends.</a>
-    
+    <br />
   </nav>
+
 </footer>
 
       
