@@ -60,15 +60,16 @@
 			
 			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = " . $uid . " AND STATUS_ID = 1 LIMIT 1;");
 			if ($crimeresult = $crimeresult->fetch_assoc()) {
+				$data["type"] = $crimeresult["TYPE_ID"];
+				$data["action"] = $crimeresult["CRIME_ID"];
 			} else {
 				$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = NULL AND STATUS_ID = 0 LIMIT 1;");
 				$crimeresult = $crimeresult->fetch_assoc();
-				$this->db->query("UPDATE CRIME SET STATUS = 1 AND USER_ID = " . 
+				$this->db->query("UPDATE CRIME SET STATUS = 1 AND USER_ID = " . $uid . " WHERE CRIME_ID = " . $crimeresult["CRIME_ID"]);
+				$data["type"] = $crimeresult["TYPE_ID"];
+				$data["action"] = $crimeresult["CRIME_ID"];
 			}
-
-			$data["type"] = $crimeresult["TYPE_ID"];
-			$data["action"] = $crimeresult["CRIME_ID"];
-			
+					
 			require_once "dashboard.php";
 			die();
 		}
@@ -76,25 +77,29 @@
 		public function crime($argument) {
 			//require_once "login.php";
 			
-			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
+			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE CRIME_ID = " . (int)$argument[0] . " LIMIT 1;");
 			$crimeresult = $crimeresult->fetch_assoc();
-			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
+			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPES WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
 			$statusresult = $statusresult->fetch_assoc();
-			$profile_id = $_COOKIE["fbs_175392325877131"];
-			$profile_id = explode("&",$profile_id);
-			$profile_id = explode("=",$profile_id[6]);
+			$profile_id = $_COOKIE["fbs_175392325877131"];			
+			if ($profile_id == "") {
+				header("Location: http://health.itza.uk.com/");
+				die();
+			}
+			$profile_id = explode("&uid=",$profile_id);
 			$profile_id = $profile_id[1];
-			$questionresult = $this->db->query("SELECT USER_ID, Q_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
+			$profile_id = substr($profile_id, 0, strlen($profile_id)-2);
+			$questionresult = $this->db->query("SELECT USER_ID, QUESTION_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
 			$questionresult = $questionresult->fetch_assoc();
-			$thequestion = $this->db->query("SELECT QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, ANSWER FROM QUESTIONS WHERE ID = " . (int)$questionresult[""] . " LIMIT 1;");
+			$thequestion = $this->db->query("SELECT QUESTION, OPTION_1, OPTION_2, OPTION_3, OPTION_4, ANSWER FROM QUESTIONS WHERE QUESTION_ID = " . (int)$questionresult["QUESTION_ID"] . " LIMIT 1;");
 			$thequestion = $thequestion->fetch_assoc();
 			
 			$crime = "A " . $statusresult["TYPE_NAME"] . " has occurred! Solve the riddle to solve the crime:";
 			$question = $thequestion["QUESTION"];
-			$answer[0] = $thequestion["OPTION1"];
-			$answer[1] = $thequestion["OPTION2"];
-			$answer[2] = $thequestion["OPTION3"];
-			$answer[3] = $thequestion["OPTION4"];
+			$answer[0] = $thequestion["OPTION_1"];
+			$answer[1] = $thequestion["OPTION_2"];
+			$answer[2] = $thequestion["OPTION_3"];
+			$answer[3] = $thequestion["OPTION_4"];
 			$correct = $thequestion["ANSWER"]-1;
 			
 			$data["meta"]  = 'prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#"';
@@ -109,8 +114,14 @@
 			
 			require_once "header.php";
 			echo "<p>There has been a crime!<br />" . $crime . "<br />" . $question . "<br /><br />";
-			for ($i = 0; $i > 3; $i++) {
-				echo "<a href='http://health.itza.uk.com/answer/" . (int)$argument[0] . "/" . $i . "' href='#'>" . $answer[$i] . "</a><br />";
+			for ($i = 0; $i <= 3; $i++) {
+				echo "<a href='http://health.itza.uk.com/answer/";
+				echo (int)$argument[0];
+				echo "/";
+				echo $i+1;
+				echo "'>";
+				echo $answer[$i];
+				echo "</a><br />";
 			}
 			echo "</p>";
 			require_once "footer.php";
