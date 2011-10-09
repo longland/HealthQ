@@ -57,17 +57,17 @@
 			$uid = $this->db->query("SELECT USER_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
 			$uid = $uid->fetch_assoc();
 			$uid = $uid["USER_ID"];
-			
+						
 			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = " . $uid . " AND STATUS_ID = 1 LIMIT 1;");
 			if ($crimeresult = $crimeresult->fetch_assoc()) {
 				$data["type"] = $crimeresult["TYPE_ID"];
 				$data["action"] = $crimeresult["CRIME_ID"];
 			} else {
-				$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = NULL AND STATUS_ID = 0 LIMIT 1;");
+				$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE STATUS_ID = 0 LIMIT 1;");
 				$crimeresult = $crimeresult->fetch_assoc();
-				$this->db->query("UPDATE CRIME SET STATUS = 1 AND USER_ID = " . $uid . " WHERE CRIME_ID = " . $crimeresult["CRIME_ID"]);
 				$data["type"] = $crimeresult["TYPE_ID"];
 				$data["action"] = $crimeresult["CRIME_ID"];
+				$this->db->query("UPDATE CRIME SET STATUS = 1 AND USER_ID = " . $uid . " WHERE CRIME_ID = " . $crimeresult["CRIME_ID"]);
 			}
 					
 			require_once "dashboard.php";
@@ -113,9 +113,9 @@
 			$data["head"] .= '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
 			
 			require_once "header.php";
-			echo "<p>There has been a crime!<br />" . $crime . "<br />" . $question . "<br /><br />";
+			echo "<p><span class='crime'>There has been a crime!<br />" . $crime . "</span><br /><h1 class='question'>" . $question . "</h1><br /><br />";
 			for ($i = 0; $i <= 3; $i++) {
-				echo "<a href='http://health.itza.uk.com/answer/";
+				echo "<a class='answer-" . $i+1 . "' href='http://health.itza.uk.com/answer/";
 				echo (int)$argument[0];
 				echo "/";
 				echo $i+1;
@@ -129,34 +129,26 @@
 		}
 		
 		public function answer($args) {
-			echo '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#">';
-			echo '<meta property="fb:app_id"          content="175392325877131">';
-			echo '<meta property="og:type"            content="crimesapp:crime"> ';
-			echo '<meta property="og:url"             content="http://health.itza.uk.com/"> ';
-			echo '<meta property="og:title"           content="A Heinious Crime"> ';
-			echo '<meta property="og:description"     content="Some Arbitrary String"> ';
-			echo '<meta property="og:image"           content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png"> ';
-			echo '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
-			echo '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
-			
-			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
-			$crimeresult = $crimeresult->fetch_assoc();
-			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
-			$statusresult = $statusresult->fetch_assoc();
-			$profile_id = $_COOKIE["fbs_175392325877131"];
-			$profile_id = explode("&",$profile_id);
-			$profile_id = explode("=",$profile_id[6]);
+			$profile_id = $_COOKIE["fbs_175392325877131"];			
+			if ($profile_id == "") {
+				header("Location: http://health.itza.uk.com/");
+				die();
+			}
+			$profile_id = explode("&uid=",$profile_id);
 			$profile_id = $profile_id[1];
-			$questionresult = $this->db->query("SELECT USER_ID, Q_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
+			$profile_id = substr($profile_id, 0, strlen($profile_id)-2);
+			$questionresult = $this->db->query("SELECT USER_ID, QUESTION_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
 			$questionresult = $questionresult->fetch_assoc();
-			$thequestion = $this->db->query("SELECT ANSWER FROM QUESTIONS WHERE ID = " . (int)$questionresult["Q_ID"] . " LIMIT 1;");
+			$thequestion = $this->db->query("SELECT ANSWER FROM QUESTIONS WHERE QUESTION_ID = " . (int)$questionresult["QUESTION_ID"] . " LIMIT 1;");
 			$thequestion = $thequestion->fetch_assoc();
 			if ($args[1] == $thequestion["ANSWER"]) {
-				$this->db->query("UPDATE CRIME SET STATUS_ID=2 WHERE CRIME_ID='" . (int)$argument[0] . "';");
-				$this->db->query("UPDATE USER SET Q_ID = Q_ID+1 WHERE USER_ID = '" . $questionresult["USER_ID"] . "';");
+				$this->db->query("UPDATE CRIME SET STATUS_ID=2 WHERE CRIME_ID=" . (int)$args[0] . ";");
+				$this->db->query("UPDATE USER SET QUESTION_ID = QUESTION_ID+1 WHERE USER_ID = " . $questionresult["USER_ID"] . ";");
 				header("Location: http://health.itza.uk.com/welldone/");
 			} else {
-				$this->db->query("UPDATE CRIME SET STATUS_ID=0 SET USER_ID=NULL WHERE CRIME_ID='" . (int)$argument[0] . "';");
+				$this->db->query("UPDATE CRIME SET STATUS_ID=0 SET USER_ID=NULL WHERE CRIME_ID=" . (int)$args[0] . ";");
+				$this->db->query("UPDATE USER SET QUESTION_ID = QUESTION_ID+1 WHERE USER_ID = " . $questionresult["USER_ID"] . ";");
+				$this->db->query("UPDATE USER SET FAILURES = FAILURES+1 WHERE USER_ID = " . $questionresult["USER_ID"] . ";");
 				header("Location: http://health.itza.uk.com/muppet/");
 			}
 		}
