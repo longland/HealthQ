@@ -9,6 +9,8 @@
 			//$this->user = 0;
 			$this->timeStarted = microtime(true);
 			
+			$this->db = new mysqli($this->settings["db"]["host"], $this->settings["db"]["user"], $this->settings["db"]["pass"], $this->settings["db"]["name"]);
+			
 			$routine = trim($routine);
 			if ($routine != "" and method_exists($this, $routine)) {
 				$refl = new ReflectionMethod($this, $routine);
@@ -43,12 +45,25 @@
 		
 		public function crime($argument) {
 			//require_once "login.php";
+			
+			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
+			$crimeresult = $crimeresult->fetch_assoc();
+			$profile_id = $_COOKIE["fbs_175392325877131"];
+			$profile_id = explode("&",$profile_id);
+			$profile_id = explode("=",$profile_id[6]);
+			$profile_id = $profile_id[1];
+			$questionresult = $this->db->query("SELECT USER_ID, Q_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
+			$questionresult = $questionresult->fetch_assoc();
+			$thequestion = $this->db->query("SELECT QUESTION, OPTION1, OPTION2, OPTION3, OPTION4, ANSWER FROM QUESTIONS WHERE ID = " . (int)$questionresult[""] . " LIMIT 1;");
+			$thequestion = $thequestion->fetch_assoc();
+			
 			$crime = "There has been a kidnapping! The kidnapper left a note, solve the riddle to solve the crime:";
 			$question = "Where did Sherlock Holmes live?";
 			$answer[0] = "221b Baker Street";
 			$answer[1] = "92 Picadilly Road";
 			$answer[2] = "314d Derby Lane";
 			$correct = 0;
+			
 			$data["head"]  = '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#">';
 			$data["head"] .= '<meta property="fb:app_id"          content="175392325877131">';
 			$data["head"] .= '<meta property="og:type"            content="crimesapp:crime"> ';
@@ -61,6 +76,31 @@
 			$data["title"] = "There Has Been A Crime!";
 			$data["body"]  = "<p>There has been a crime!<br />" . $crime . "<br />" . $question . "<br /><br />";
 			$data["body"] .= "<a onclick=" . "</p>";
+			require_once "footer.php";
+			die();
+		}
+		
+		public function saveuser($args) {
+			$userid = $args[0];
+		}
+		
+		public function welldone($args) {
+			require_once "header.php";
+			require_once "welldone.php";
+			require_once "footer.php";
+			die();
+		}
+		
+		public function recommend($args) {
+			require_once "header.php";
+			require_once "recommend.php";
+			require_once "footer.php";
+			die();
+		}
+		
+		public function muppet($args) {
+			require_once "header.php";
+			require_once "muppet.php";
 			require_once "footer.php";
 			die();
 		}
