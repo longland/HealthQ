@@ -51,7 +51,7 @@
 			
 			$crimeresult = $this->db->query("SELECT ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE USER_ID = " . (int)$argument[0] . " AND STATUS_ID = 1 LIMIT 1;");
 			if ($crimeresult = $crimeresult->fetch_assoc()) {
-				$data["crime"]["typeid"] = $crimeresult["TYPE_ID"];
+				$data["action"] = $crimeresult["TYPE_ID"];
 			} else {
 				$data["action"] = "Play now";
 			}
@@ -115,13 +115,14 @@
 			$profile_id = $profile_id[1];
 			$questionresult = $this->db->query("SELECT USER_ID, Q_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
 			$questionresult = $questionresult->fetch_assoc();
-			$thequestion = $this->db->query("SELECT ANSWER FROM QUESTIONS WHERE ID = " . (int)$questionresult[""] . " LIMIT 1;");
+			$thequestion = $this->db->query("SELECT ANSWER FROM QUESTIONS WHERE ID = " . (int)$questionresult["Q_ID"] . " LIMIT 1;");
 			$thequestion = $thequestion->fetch_assoc();
 			if ($args[1] == $thequestion["ANSWER"]) {
-				// Update to Solved
+				$this->db->query("UPDATE CRIME SET STATUS_ID=2 WHERE CRIME_ID='" . (int)$argument[0] . "';");
+				$this->db->query("UPDATE USER SET Q_ID = Q_ID+1 WHERE USER_ID = '" . $questionresult["USER_ID"] . "';";
 				header("Location: http://health.itza.uk.com/welldone/");
 			} else {
-				// Update to Unsolved, remove user
+				$this->db->query("UPDATE CRIME SET STATUS_ID=0 SET USER_ID=NULL WHERE CRIME_ID='" . (int)$argument[0] . "';");
 				header("Location: http://health.itza.uk.com/muppet/");
 			}
 		}
