@@ -36,10 +36,20 @@
 		}
 		
 		public function dashboard($argument) {
+			$profile_id = $_COOKIE["fbs_175392325877131"];
+			$profile_id = explode("&",$profile_id);
+			$profile_id = explode("=",$profile_id[6]);
+			$profile_id = $profile_id[1];
+			
+			$isnewuser = $this->db->query("SELECT USER_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
+			if (!$isnewuser = $isnewuser->fetch_assoc();) {
+				$noqs = $this->db->query("SELECT QUESTION FROM QUESTIONS");
+				$noqs = $noqs->num_rows - 1;
+				$startpoint = mt_rand(0,$noqs);
+				$this->db->query("INSERT INTO USER (PROFILE_ID, Q_ID) VALUES (" . $profile_id . " , " . $startpoint . ")");
+			}
+			
 			require_once "dashboard.php";
-			//$data["title"] = "Dashboard";
-			//$data["body"] = "<p>This is the dashboard. Fear it's wrath!</p>";
-			//require_once "footer.php";
 			die();
 		}
 		
