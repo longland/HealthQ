@@ -1,5 +1,3 @@
-<?php
-$data["body"] = "
 <div class='login'>
 <h2>Welcome to AetherCop</h2>
 <p>Please log in via facebook to start solving crimes in the Riddled with crime.</p>
@@ -12,4 +10,4 @@ FB.init({
         });
 </script>
 <fb:login-button perms='email' redirect_uri='http://health.itza.uk.com/dashboard'>Login with Facebook</fb:login-button>
-</div>";
+</div>

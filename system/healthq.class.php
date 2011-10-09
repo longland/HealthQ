@@ -25,6 +25,7 @@
 		}
 		
 		public function index($argument) {
+			require_once "header.php";
 			require_once "login.php";
 			//$data["title"] = "Home";
 			//$data["body"] = "<p>Are you happy now?</p>";
