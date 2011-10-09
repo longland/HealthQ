@@ -9,8 +9,7 @@
          });
          FB.api('/me', function(user) {
            if(user != null) {
-              var image = document.getElementById('image');
-              image.src = 'https://graph.facebook.com/' + user.id + '/picture';
+              
               var name = document.getElementById('name');
               
               name.innerHTML = user.name
@@ -18,13 +17,43 @@
            }
          });
        </script>
-           <h1>Schoolboy error!</h1>
-           <div align="center">Hey,
-           <img id="image"/>
-           <div id="name"></div> unlucky this time :(
-           </div>
-           <div align="center">
-           <a href="javascript:FB.ui({ method: 'feed', 
-            message: 'Facebook for Websites is super-cool'})">Ask your friends for help?</a>
-            </div>
+           
+           
+           
+            
+            <div class="container">
+      <header>
+  <a href="/"><img alt="Riddled with Crime" class="round" src="http://health.itza.uk.com/extras/logo.png" /></a>
+
+  <nav class="round">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="#">Log out</a></li>
+    </ul>
+  </nav>
+</header>
+
+      <section class="round">
+      
+   <h1> <span id="name"></span> ...you silly SAUSAGE!</h1>
+   
+    <p>
+     You didn't get the answer right :( Not to worry, click below and let's try again.
+    </p>
+   <center><img align="center" src="http://health.itza.uk.com/extras/sausage.png" /></center>
+ <a href="/signup" class="signup_button round">Continue</a>
+  
+
+		
+      </section>
+      <footer>
+  
+  <nav class="round">
+   <br />
+   <h2>Maybe your friends can help? Ask them on Facebbok</h2>
+    <a href="javascript:FB.ui({ method: 'feed', 
+            message: 'Facebook for Websites is super-cool'})" class="tell_button round">Tell your friends.</a>
+    <br />
+  </nav>
 <?php    include 'footer.php'; ?>
