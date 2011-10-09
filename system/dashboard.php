@@ -1,8 +1,4 @@
-<html>
-    <head>
-      <title>Riddled with Crime</title>
-    </head>
-    <body>
+
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js">
       </script>
@@ -24,5 +20,4 @@
            <img id="image"/>
            <div id="name"></div> pick a crime below to play.
            </div>
-    </body>
- </html>
+    
