@@ -28,7 +28,12 @@ $user = json_decode(file_get_contents(
 ?>
 <html>
   <body>
-  <div class='login'>
+<div class="container">
+      <header>
+  <a href="/"><img alt="Riddled with Crime" class="round" src="http://health.itza.uk.com/extras/logo.png" /></a>
+  </header>
+  
+  <section class="round">
 <h2>Welcome to Riddled with Crime</h2>
 <p>Please log in via facebook to start solving crimes close to you.</p>
 
@@ -51,5 +56,7 @@ window.location.href = "http://health.itza.uk.com/dashboard";
         window.location.reload();
       });
     </script>
+    </section>
+</div>
   </body>
 </html>
