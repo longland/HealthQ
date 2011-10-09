@@ -54,13 +54,20 @@
 				$startpoint = mt_rand(1,$noqs);
 				$this->db->query("INSERT INTO USER (PROFILE_ID, QUESTION_ID) VALUES (" . $profile_id . " , " . $startpoint . ")");
 			}
+			$uid = $this->db->query("SELECT USER_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
+			$uid = $uid->fetch_assoc();
+			$uid = $uid["USER_ID"];
 			
-			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = " . (int)$argument[0] . " AND STATUS_ID = 1 LIMIT 1;");
+			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = " . $uid . " AND STATUS_ID = 1 LIMIT 1;");
 			if ($crimeresult = $crimeresult->fetch_assoc()) {
-				$data["action"] = $crimeresult["TYPE_ID"];
 			} else {
-				$data["action"] = "Play now";
+				$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = NULL AND STATUS_ID = 0 LIMIT 1;");
+				$crimeresult = $crimeresult->fetch_assoc();
+				$this->db->query("UPDATE CRIME SET STATUS = 1 AND USER_ID = " . 
 			}
+
+			$data["type"] = $crimeresult["TYPE_ID"];
+			$data["action"] = $crimeresult["CRIME_ID"];
 			
 			require_once "dashboard.php";
 			die();
@@ -90,11 +97,11 @@
 			$answer[3] = $thequestion["OPTION4"];
 			$correct = $thequestion["ANSWER"]-1;
 			
-			$data["head"]  = '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#">';
+			$data["meta"]  = 'prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#"';
 			$data["head"] .= '<meta property="fb:app_id"          content="175392325877131">';
 			$data["head"] .= '<meta property="og:type"            content="crimesapp:crime"> ';
-			$data["head"] .= '<meta property="og:url"             content="http://health.itza.uk.com/crime/0/"> ';
-			$data["head"] .= '<meta property="og:title"           content="Sample Crime"> ';
+			$data["head"] .= '<meta property="og:url"             content="http://health.itza.uk.com/"> ';
+			$data["head"] .= '<meta property="og:title"           content="A Heinious Crime"> ';
 			$data["head"] .= '<meta property="og:description"     content="Some Arbitrary String"> ';
 			$data["head"] .= '<meta property="og:image"           content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png"> ';
 			$data["head"] .= '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
@@ -111,6 +118,16 @@
 		}
 		
 		public function answer($args) {
+			echo '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# crimesapp: http://ogp.me/ns/fb/crimesapp#">';
+			echo '<meta property="fb:app_id"          content="175392325877131">';
+			echo '<meta property="og:type"            content="crimesapp:crime"> ';
+			echo '<meta property="og:url"             content="http://health.itza.uk.com/"> ';
+			echo '<meta property="og:title"           content="A Heinious Crime"> ';
+			echo '<meta property="og:description"     content="Some Arbitrary String"> ';
+			echo '<meta property="og:image"           content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png"> ';
+			echo '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
+			echo '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
+			
 			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
 			$crimeresult = $crimeresult->fetch_assoc();
 			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
