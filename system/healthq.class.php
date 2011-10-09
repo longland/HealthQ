@@ -37,6 +37,12 @@
 		
 		public function dashboard($argument) {
 			$profile_id = $_COOKIE["fbs_175392325877131"];
+			
+			if ($profile_id == "") {
+				header("Location: http://health.itza.uk.com/");
+				die();
+			}
+			
 			$profile_id = explode("&uid=",$profile_id);
 			$profile_id = $profile_id[1];
 			$profile_id = substr($profile_id, 0, strlen($profile_id)-2);

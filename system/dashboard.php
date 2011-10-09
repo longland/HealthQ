@@ -47,6 +47,7 @@
  <a href="/signup" class="signup_button round">Play now!</a>
   
 
+		<?php require_once "stats.php"; ?>
       </section>
       <footer>
   <nav class="round">
