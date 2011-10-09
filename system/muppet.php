@@ -12,15 +12,19 @@
               var image = document.getElementById('image');
               image.src = 'https://graph.facebook.com/' + user.id + '/picture';
               var name = document.getElementById('name');
-              var id = document.getElementById('id');
+              
               name.innerHTML = user.name
-              id.innerHTML = user.id
+              
            }
          });
        </script>
+           
            <div align="center">Hey,
            <img id="image"/>
            <div id="name"></div> pick a crime below to play.
            </div>
-           <div id="id"></div> This is your facebook ID.
+           <div align="center">
+           <a href="javascript:FB.ui({ method: 'feed', 
+            message: 'Facebook for Websites is super-cool'})">Tell your friends.</a>
+            </div>
 <?php    include 'footer.php'; ?>
