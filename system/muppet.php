@@ -18,13 +18,13 @@
            }
          });
        </script>
-           
+           <h1>Schoolboy error!</h1>
            <div align="center">Hey,
            <img id="image"/>
-           <div id="name"></div> pick a crime below to play.
+           <div id="name"></div> unlucky this time :(
            </div>
            <div align="center">
            <a href="javascript:FB.ui({ method: 'feed', 
-            message: 'Facebook for Websites is super-cool'})">Tell your friends.</a>
+            message: 'Facebook for Websites is super-cool'})">Ask your friends for help?</a>
             </div>
 <?php    include 'footer.php'; ?>
