@@ -50,7 +50,7 @@
  </p>
  <center><img align="center" src="http://health.itza.uk.com/extras/medal.png" /></center>
    
- <a href="/signup" class="signup_button round">Continue</a>
+ <a href="http://health.itza.uk.com/" class="signup_button round">Continue</a>
   
 
 		

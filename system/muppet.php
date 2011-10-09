@@ -42,7 +42,7 @@
      You didn't get the answer right :( Not to worry, click below and let's try again.
     </p>
    <center><img align="center" src="http://health.itza.uk.com/extras/sausage.png" /></center>
- <a href="/signup" class="signup_button round">Continue</a>
+ <a href="http://health.itza.uk.com/" class="signup_button round">Continue</a>
   
 
 		

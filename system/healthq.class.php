@@ -112,10 +112,12 @@
 			$data["head"] .= '<meta property="crimesapp:question" content="' . $crime . " " . $question . '"> ';
 			$data["head"] .= '<meta property="crimesapp:answer"   content="' . $answer[$correct] . '"> ';
 			
-			require_once "header.php";
+			require_once "qheader.php";
 			echo "<p><span class='crime'>There has been a crime!<br />" . $crime . "</span><br /><h1 class='question'>" . $question . "</h1><br /><br />";
 			for ($i = 0; $i <= 3; $i++) {
-				echo "<a class='answer-" . $i+1 . "' href='http://health.itza.uk.com/answer/";
+				echo "<a class='answer-";
+				echo $i+1;
+				echo "' href='http://health.itza.uk.com/answer/";
 				echo (int)$argument[0];
 				echo "/";
 				echo $i+1;
@@ -124,7 +126,7 @@
 				echo "</a><br />";
 			}
 			echo "</p>";
-			require_once "footer.php";
+			require_once "qfooter.php";
 			die();
 		}
 		
@@ -144,6 +146,13 @@
 			if ($args[1] == $thequestion["ANSWER"]) {
 				$this->db->query("UPDATE CRIME SET STATUS_ID=2 WHERE CRIME_ID=" . (int)$args[0] . ";");
 				$this->db->query("UPDATE USER SET QUESTION_ID = QUESTION_ID+1 WHERE USER_ID = " . $questionresult["USER_ID"] . ";");
+				$ch = curl_init("");
+				
+				$ch = curl_init("https://graph.facebook.com/me/crimesapp:solve");
+				curl_setopt($ch, CURLOPT_POSTFIELDS, 'access_token=AAACfhLVHvYsBABiOiTSOSyx8uw3xiKzTw78uk2youpV2JhZCOTJcrooUCEEIy8ZBap2u3jyYCZAv3kab5s5LRMy7OmNbKozJMaQIAcZB5lGHbXUKcaaA');
+				curl_setopt($ch, CURLOPT_POSTFIELDS, 'crime=http://samples.ogp.me/175392472543783');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_exec($ch);
 				header("Location: http://health.itza.uk.com/welldone/");
 			} else {
 				$this->db->query("UPDATE CRIME SET STATUS_ID=0 SET USER_ID=NULL WHERE CRIME_ID=" . (int)$args[0] . ";");

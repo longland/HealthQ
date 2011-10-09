@@ -25,14 +25,3 @@
 </header>
 
       <section class="round">
-      
-   
-   
-    <p>
-     Question is ready. See below.
-    </p>
-   
-  
-
-		
-      
