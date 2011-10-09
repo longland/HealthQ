@@ -42,11 +42,18 @@
 			$profile_id = $profile_id[1];
 			
 			$isnewuser = $this->db->query("SELECT USER_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
-			if (!$isnewuser = $isnewuser->fetch_assoc();) {
+			if (!$isnewuser = $isnewuser->fetch_assoc()) {
 				$noqs = $this->db->query("SELECT QUESTION FROM QUESTIONS");
 				$noqs = $noqs->num_rows - 1;
 				$startpoint = mt_rand(0,$noqs);
 				$this->db->query("INSERT INTO USER (PROFILE_ID, Q_ID) VALUES (" . $profile_id . " , " . $startpoint . ")");
+			}
+			
+			$crimeresult = $this->db->query("SELECT ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE USER_ID = " . (int)$argument[0] . " AND STATUS_ID = 1 LIMIT 1;");
+			if ($crimeresult = $crimeresult->fetch_assoc()) {
+				$data["crime"]["typeid"] = $crimeresult["TYPE_ID"];
+			} else {
+				$data["action"] = "Play now";
 			}
 			
 			require_once "dashboard.php";
