@@ -37,19 +37,19 @@
 		
 		public function dashboard($argument) {
 			$profile_id = $_COOKIE["fbs_175392325877131"];
-			$profile_id = explode("&",$profile_id);
-			$profile_id = explode("=",$profile_id[6]);
+			$profile_id = explode("&uid=",$profile_id);
 			$profile_id = $profile_id[1];
+			$profile_id = substr($profile_id, 0, strlen($profile_id)-2);
 			
 			$isnewuser = $this->db->query("SELECT USER_ID FROM USER WHERE PROFILE_ID = " . $profile_id . " LIMIT 1;");
-			if (!$isnewuser = $isnewuser->fetch_assoc()) {
+			if (!($isnewuser = $isnewuser->fetch_assoc())) {
 				$noqs = $this->db->query("SELECT QUESTION FROM QUESTIONS");
-				$noqs = $noqs->num_rows - 1;
-				$startpoint = mt_rand(0,$noqs);
-				$this->db->query("INSERT INTO USER (PROFILE_ID, Q_ID) VALUES (" . $profile_id . " , " . $startpoint . ")");
+				$noqs = $noqs->num_rows;
+				$startpoint = mt_rand(1,$noqs);
+				$this->db->query("INSERT INTO USER (PROFILE_ID, QUESTION_ID) VALUES (" . $profile_id . " , " . $startpoint . ")");
 			}
 			
-			$crimeresult = $this->db->query("SELECT ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE USER_ID = " . (int)$argument[0] . " AND STATUS_ID = 1 LIMIT 1;");
+			$crimeresult = $this->db->query("SELECT CRIME_ID, STATUS_ID, TYPE_ID, CRIME_LAT, CRIME_LONG, USER_ID FROM CRIME WHERE USER_ID = " . (int)$argument[0] . " AND STATUS_ID = 1 LIMIT 1;");
 			if ($crimeresult = $crimeresult->fetch_assoc()) {
 				$data["action"] = $crimeresult["TYPE_ID"];
 			} else {
@@ -65,7 +65,7 @@
 			
 			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
 			$crimeresult = $crimeresult->fetch_assoc();
-			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;";
+			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
 			$statusresult = $statusresult->fetch_assoc();
 			$profile_id = $_COOKIE["fbs_175392325877131"];
 			$profile_id = explode("&",$profile_id);
@@ -107,7 +107,7 @@
 		public function answer($args) {
 			$crimeresult = $this->db->query("SELECT USER_ID, STATUS_ID, TYPE_ID, LAT, LONG, USER_ID WHERE ID = " . (int)$argument[0] . " LIMIT 1;");
 			$crimeresult = $crimeresult->fetch_assoc();
-			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;";
+			$statusresult = $this->db->query("SELECT TYPE_NAME FROM CRIME_TYPE WHERE TYPE_ID = " . (int)$crimeresult["TYPE_ID"] . " LIMIT 1;");
 			$statusresult = $statusresult->fetch_assoc();
 			$profile_id = $_COOKIE["fbs_175392325877131"];
 			$profile_id = explode("&",$profile_id);
@@ -119,7 +119,7 @@
 			$thequestion = $thequestion->fetch_assoc();
 			if ($args[1] == $thequestion["ANSWER"]) {
 				$this->db->query("UPDATE CRIME SET STATUS_ID=2 WHERE CRIME_ID='" . (int)$argument[0] . "';");
-				$this->db->query("UPDATE USER SET Q_ID = Q_ID+1 WHERE USER_ID = '" . $questionresult["USER_ID"] . "';";
+				$this->db->query("UPDATE USER SET Q_ID = Q_ID+1 WHERE USER_ID = '" . $questionresult["USER_ID"] . "';");
 				header("Location: http://health.itza.uk.com/welldone/");
 			} else {
 				$this->db->query("UPDATE CRIME SET STATUS_ID=0 SET USER_ID=NULL WHERE CRIME_ID='" . (int)$argument[0] . "';");
