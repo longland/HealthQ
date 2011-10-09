@@ -9,8 +9,6 @@
          });
          FB.api('/me', function(user) {
            if(user != null) {
-              var image = document.getElementById('image');
-              image.src = 'https://graph.facebook.com/' + user.id + '/picture';
               var name = document.getElementById('name');
               
               name.innerHTML = user.name + ',';
@@ -49,6 +47,7 @@
  <a href="/signup" class="signup_button round">Play now!</a>
   
 
+		<?php require_once "stats.php"; ?>
       </section>
       <footer>
   <nav class="round">
